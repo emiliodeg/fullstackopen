@@ -26,10 +26,11 @@ const App = () => {
     setPhoneNumber(event.target.value);
   };
 
-  const handleDeletePerson = (id) => {
-    personsSrv.remove(id).then(() => {
-      setPersons(persons.filter((person) => person.id !== id));
-    });
+  const handleDeletePerson = (person) => {
+    personsSrv
+      .remove(person.id)
+      .then(() => setPersons(persons.filter(({ id }) => person.id !== id)))
+      .catch(() => handleResetFormAndShowNotification(`Information of ${person.name} has already been removed from server`, "error"));
   };
 
   const handleResetFormAndShowNotification = (message, type) => {
@@ -47,11 +48,14 @@ const App = () => {
     if (personExists) {
       if (!confirm(`${personExists.name} is already added to phonebook, replace the old number with a new one?`)) return;
 
-      return personsSrv.update(personExists.id, { ...personExists, phoneNumber: newPhoneNumber }).then((data) => {
-        setPersons(persons.map((person) => (person.id !== data.id ? person : data)));
+      return personsSrv
+        .update(personExists.id, { ...personExists, phoneNumber: newPhoneNumber })
+        .then((data) => {
+          setPersons(persons.map((person) => (person.id !== data.id ? person : data)));
 
-        handleResetFormAndShowNotification(`Updated ${newName}`, "success");
-      });
+          handleResetFormAndShowNotification(`Updated ${newName}`, "success");
+        })
+        .catch(() => handleResetFormAndShowNotification(`Information of ${newName} has already been removed from server`, "error"));
     }
 
     personsSrv.create({ name: newName, phoneNumber: newPhoneNumber }).then((data) => {

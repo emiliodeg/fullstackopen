@@ -1,6 +1,6 @@
 export default function PersonList({ filteredPersons, handleDeletePerson }) {
   const handleConfirm = (person) => {
-    if (window.confirm(`Delete ${person.name}?`)) return handleDeletePerson(person.id);
+    if (window.confirm(`Delete ${person.name}?`)) return handleDeletePerson(person);
   };
 
   return (
