@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import PersonsList from "./components/PersonsList";
+import personsSrv from "./services/persons";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -11,7 +11,7 @@ const App = () => {
   const [newPhoneNumber, setPhoneNumber] = useState("");
 
   useEffect(() => {
-    axios.get("http://localhost:3001/persons").then((response) => setPersons(response.data));
+    personsSrv.getAll().then((data) => setPersons(data));
   }, []);
 
   const filteredPersons = persons.filter((person) => person.name.toLowerCase().includes(filter.toLowerCase()));
@@ -32,7 +32,7 @@ const App = () => {
       return;
     }
 
-    axios.post("http://localhost:3001/persons", { name: newName, phoneNumber: newPhoneNumber }).then(({ data }) => {
+    personsSrv.create({ name: newName, phoneNumber: newPhoneNumber }).then((data) => {
       setPersons(persons.concat({ name: data.name, phoneNumber: data.phoneNumber, id: data.id }));
       setNewName("");
       setPhoneNumber("");
