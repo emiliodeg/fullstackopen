@@ -33,9 +33,15 @@ const App = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (persons.some((person) => person.name.toLowerCase() === newName.toLowerCase())) {
-      alert(`${newName} is already added to phonebook`);
-      return;
+    const personExists = persons.find((person) => person.name.toLowerCase() === newName.toLowerCase());
+    if (personExists) {
+      if (!confirm(`${personExists.name} is already added to phonebook, replace the old number with a new one?`)) return;
+
+      return personsSrv.update(personExists.id, { ...personExists, phoneNumber: newPhoneNumber }).then((data) => {
+        setPersons(persons.map((person) => (person.id !== data.id ? person : data)));
+        setNewName("");
+        setPhoneNumber("");
+      });
     }
 
     personsSrv.create({ name: newName, phoneNumber: newPhoneNumber }).then((data) => {
