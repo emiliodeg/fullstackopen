@@ -32,9 +32,11 @@ const App = () => {
       return;
     }
 
-    setPersons(persons.concat({ name: newName, phoneNumber: newPhoneNumber, id: persons.length + 1 }));
-    setNewName("");
-    setPhoneNumber("");
+    axios.post("http://localhost:3001/persons", { name: newName, phoneNumber: newPhoneNumber }).then(({ data }) => {
+      setPersons(persons.concat({ name: data.name, phoneNumber: data.phoneNumber, id: data.id }));
+      setNewName("");
+      setPhoneNumber("");
+    });
   };
 
   return (
