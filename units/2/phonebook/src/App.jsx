@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import PersonsList from "./components/PersonsList";
+import Notification from "./components/Notification";
 import personsSrv from "./services/persons";
 
 const App = () => {
@@ -9,6 +10,7 @@ const App = () => {
   const [filter, setFilter] = useState("");
   const [newName, setNewName] = useState("");
   const [newPhoneNumber, setPhoneNumber] = useState("");
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     personsSrv.getAll().then((data) => setPersons(data));
@@ -30,6 +32,14 @@ const App = () => {
     });
   };
 
+  const handleResetFormAndShowNotification = (message, type) => {
+    setNotification({ message, type });
+    setNewName("");
+    setPhoneNumber("");
+
+    setTimeout(() => setNotification(null), 3000);
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -39,21 +49,22 @@ const App = () => {
 
       return personsSrv.update(personExists.id, { ...personExists, phoneNumber: newPhoneNumber }).then((data) => {
         setPersons(persons.map((person) => (person.id !== data.id ? person : data)));
-        setNewName("");
-        setPhoneNumber("");
+
+        handleResetFormAndShowNotification(`Updated ${newName}`, "success");
       });
     }
 
     personsSrv.create({ name: newName, phoneNumber: newPhoneNumber }).then((data) => {
       setPersons(persons.concat({ name: data.name, phoneNumber: data.phoneNumber, id: data.id }));
-      setNewName("");
-      setPhoneNumber("");
+      handleResetFormAndShowNotification(`Added ${newName}`, "success");
     });
   };
 
   return (
     <div>
       <h2>Phonebook</h2>
+
+      <Notification notification={notification} />
 
       <Filter filter={filter} setFilter={setFilter} />
 
