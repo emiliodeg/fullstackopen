@@ -24,6 +24,12 @@ const App = () => {
     setPhoneNumber(event.target.value);
   };
 
+  const handleDeletePerson = (id) => {
+    personsSrv.remove(id).then(() => {
+      setPersons(persons.filter((person) => person.id !== id));
+    });
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -48,16 +54,16 @@ const App = () => {
       <h2>Add new</h2>
 
       <PersonForm
-        handleSubmit={handleSubmit}
         newName={newName}
-        handleNameChange={handleNameChange}
         newPhoneNumber={newPhoneNumber}
+        handleSubmit={handleSubmit}
+        handleNameChange={handleNameChange}
         handlePhoneNumberChange={handlePhoneNumberChange}
       />
 
       <h2>Numbers</h2>
 
-      <PersonsList filteredPersons={filteredPersons} />
+      <PersonsList filteredPersons={filteredPersons} handleDeletePerson={handleDeletePerson} />
     </div>
   );
 };
