@@ -2,6 +2,6 @@
 
 ## Exercises
 
-[Course Info](./course-info)
-[Phonebook](./phonebook)
-[Country weather](./countries)
+- [Course Info](./course-info)
+- [Phonebook](./phonebook)
+- [Country weather](./countries)
