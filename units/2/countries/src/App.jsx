@@ -18,7 +18,7 @@ export default function App() {
   return (
     <>
       <Search search={search} setSearch={setSearch} />
-
+      
       {search && <CountriesList countries={list} setSearch={setSearch} />}
 
       {search && list.length === 1 && <CountryDetail country={list[0]} />}
