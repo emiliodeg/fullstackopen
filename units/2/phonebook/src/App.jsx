@@ -49,7 +49,7 @@ const App = () => {
       if (!confirm(`${personExists.name} is already added to phonebook, replace the old number with a new one?`)) return;
 
       return personsSrv
-        .update(personExists.id, { ...personExists, phoneNumber: newPhoneNumber })
+        .update(personExists.id, { ...personExists, number: newPhoneNumber })
         .then((data) => {
           setPersons(persons.map((person) => (person.id !== data.id ? person : data)));
 
@@ -58,8 +58,8 @@ const App = () => {
         .catch(() => handleResetFormAndShowNotification(`Information of ${newName} has already been removed from server`, "error"));
     }
 
-    personsSrv.create({ name: newName, phoneNumber: newPhoneNumber }).then((data) => {
-      setPersons(persons.concat({ name: data.name, phoneNumber: data.phoneNumber, id: data.id }));
+    personsSrv.create({ name: newName, number: newPhoneNumber }).then((data) => {
+      setPersons(persons.concat({ name: data.name, phoneNumber: data.number, id: data.id }));
       handleResetFormAndShowNotification(`Added ${newName}`, "success");
     });
   };
