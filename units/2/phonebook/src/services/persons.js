@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const apiUrl = "http://localhost:3001/api/persons";
+const apiUrl = "https://fullstackopen-api-emiliodeg.fly.dev/api/persons";
 
 const getAll = () => axios.get(apiUrl).then(({ data }) => data);
 
