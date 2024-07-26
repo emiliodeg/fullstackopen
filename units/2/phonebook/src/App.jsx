@@ -49,13 +49,13 @@ const App = () => {
       if (!confirm(`${personExists.name} is already added to phonebook, replace the old number with a new one?`)) return;
 
       return personsSrv
-        .update(personExists.id, { ...personExists, number: newPhoneNumber })
+        .update(personExists.id, { name: personExists.name, number: newPhoneNumber })
         .then((data) => {
           setPersons(persons.map((person) => (person.id !== data.id ? person : data)));
 
           showNotification(`Updated ${newName}`, "success");
         })
-        .catch(() => showNotification(`Information of ${newName} has already been removed from server`, "error"));
+        .catch((message) => showNotification(`Something went wrong when updating ${newName}: ${message}`, "error"));
     }
 
     personsSrv

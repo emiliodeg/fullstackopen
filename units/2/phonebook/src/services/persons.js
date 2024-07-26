@@ -13,7 +13,13 @@ const create = (newPerson) =>
       throw error.response.data.error;
     });
 
-const update = (id, data) => axios.put(`${apiUrl}/${id}`, data).then(({ data }) => data);
+const update = (id, data) =>
+  axios
+    .put(`${apiUrl}/${id}`, data)
+    .then(({ data }) => data)
+    .catch((error) => {
+      throw error.response.data.error;
+    });
 
 const remove = (id) => axios.delete(`${apiUrl}/${id}`).then(({ data }) => data);
 
