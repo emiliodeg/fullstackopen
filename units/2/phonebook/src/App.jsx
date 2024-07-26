@@ -30,10 +30,10 @@ const App = () => {
     personsSrv
       .remove(person.id)
       .then(() => setPersons(persons.filter(({ id }) => person.id !== id)))
-      .catch(() => handleResetFormAndShowNotification(`Information of ${person.name} has already been removed from server`, "error"));
+      .catch(() => showNotification(`Information of ${person.name} has already been removed from server`, "error"));
   };
 
-  const handleResetFormAndShowNotification = (message, type) => {
+  const showNotification = (message, type) => {
     setNotification({ message, type });
     setNewName("");
     setPhoneNumber("");
@@ -53,15 +53,18 @@ const App = () => {
         .then((data) => {
           setPersons(persons.map((person) => (person.id !== data.id ? person : data)));
 
-          handleResetFormAndShowNotification(`Updated ${newName}`, "success");
+          showNotification(`Updated ${newName}`, "success");
         })
-        .catch(() => handleResetFormAndShowNotification(`Information of ${newName} has already been removed from server`, "error"));
+        .catch(() => showNotification(`Information of ${newName} has already been removed from server`, "error"));
     }
 
-    personsSrv.create({ name: newName, number: newPhoneNumber }).then((data) => {
-      setPersons(persons.concat({ name: data.name, phoneNumber: data.number, id: data.id }));
-      handleResetFormAndShowNotification(`Added ${newName}`, "success");
-    });
+    personsSrv
+      .create({ name: newName, number: newPhoneNumber })
+      .then((data) => {
+        setPersons(persons.concat({ name: data.name, phoneNumber: data.number, id: data.id }));
+        showNotification(`Added ${newName}`, "success");
+      })
+      .catch((error) => showNotification(error, "error"));
   };
 
   return (
