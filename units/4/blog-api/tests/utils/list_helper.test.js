@@ -119,3 +119,31 @@ describe("favorite blog", () => {
     assert.deepStrictEqual(result, longListOfBlogs[2]);
   });
 });
+
+describe("most blogs", () => {
+  test("of empty list is null", () => {
+    const result = listHelper.mostBlogs([]);
+    assert.strictEqual(result, null);
+  });
+  test("when list has only one blog, equals the likes of that", () => {
+    const listWithOneBlog = [
+      {
+        _id: "5a422aa71b54a676234d17f8",
+        title: "Go To Statement Considered Harmful",
+        author: "Edsger W. Dijkstra",
+        url: "https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf",
+        likes: 5,
+        __v: 0,
+      },
+    ];
+    const result = listHelper.mostBlogs(listWithOneBlog);
+
+    assert.deepStrictEqual(result, { author: "Edsger W. Dijkstra", blogs: 1 });
+  });
+
+  test("when list has many blogs", () => {
+    const result = listHelper.mostBlogs(longListOfBlogs);
+    
+    assert.deepStrictEqual(result, { author: "Robert C. Martin", blogs: 3 });
+  });
+});
