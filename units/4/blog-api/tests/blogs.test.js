@@ -26,81 +26,96 @@ const initialBlogs = [
     url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
     likes: 12,
   },
+  // without likes
   {
     title: "First class tests",
     author: "Robert C. Martin",
     url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
   },
+  // without title
   {
-    title: "TDD harms architecture",
     author: "Robert C. Martin",
     url: "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
     likes: 0,
   },
+  // without url
   {
     title: "Type wars",
     author: "Robert C. Martin",
-    url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
     likes: 2,
   },
 ];
 
-beforeEach(async () => {
-  await Blog.deleteMany({});
-  let blogEntry = new Blog(initialBlogs[0]);
-  await blogEntry.save();
-  blogEntry = new Blog(initialBlogs[1]);
-  await blogEntry.save();
-});
-// ...
+describe("blogs api", () => {
+  beforeEach(async () => {
+    await Blog.deleteMany({});
+    let blogEntry = new Blog(initialBlogs[0]);
+    await blogEntry.save();
+    blogEntry = new Blog(initialBlogs[1]);
+    await blogEntry.save();
+  });
 
-test("blogs are returned as json", async () => {
-  await api
-    .get("/api/blogs")
-    .expect(200)
-    .expect("Content-Type", /application\/json/);
-});
+  test("blogs are returned as json", async () => {
+    await api
+      .get("/api/blogs")
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+  });
 
-test("there are 2 saved blogs", async () => {
-  const result = await api.get("/api/blogs");
+  test("there are 2 saved blogs", async () => {
+    const result = await api.get("/api/blogs");
 
-  assert.strictEqual(result.body.length, 2);
-});
+    assert.strictEqual(result.body.length, 2);
+  });
 
-test("there is a ID property", async () => {
-  const result = await api.get("/api/blogs");
+  test("there is a ID property", async () => {
+    const result = await api.get("/api/blogs");
 
-  result.body.forEach((blog) => assert(blog.id));
-});
+    result.body.forEach((blog) => assert(blog.id));
+  });
 
-test("a valid blog can be added", async () => {
-  const newBlog = initialBlogs[2];
+  test("a valid blog can be added", async () => {
+    const newBlog = initialBlogs[2];
 
-  await api
-    .post("/api/blogs")
-    .send(newBlog)
-    .expect(201)
-    .expect("Content-Type", /application\/json/);
+    await api
+      .post("/api/blogs")
+      .send(newBlog)
+      .expect(201)
+      .expect("Content-Type", /application\/json/);
 
-  const result = await api.get("/api/blogs");
-  const titles = result.body.map(({ title }) => title);
+    const result = await api.get("/api/blogs");
+    const titles = result.body.map(({ title }) => title);
 
-  assert.strictEqual(result.body.length, 3);
-  assert.strictEqual(titles.includes(newBlog.title), true);
-});
+    assert.strictEqual(result.body.length, 3);
+    assert.strictEqual(titles.includes(newBlog.title), true);
+  });
 
-test("a blog without likes defaults to 0", async () => {
-  const newBlog = initialBlogs[3];
-  await api
-    .post("/api/blogs")
-    .send(newBlog)
-    .expect(201);
+  test("a blog without likes defaults to 0", async () => {
+    const newBlog = initialBlogs[3];
+    await api.post("/api/blogs").send(newBlog).expect(201);
 
-  const result = await api.get("/api/blogs");
+    const result = await api.get("/api/blogs");
 
-  assert.strictEqual(result.body[2].likes, 0);
-});
+    assert.strictEqual(result.body[2].likes, 0);
+  });
 
-after(async () => {
-  await mongoose.connection.close();
+  test("a blog without title is not added", async () => {
+    const newBlog = initialBlogs[4];
+    const response = await api.post("/api/blogs").send(newBlog).expect(400);
+
+    assert(response.body.error);
+    assert.match(response.body.error, /title/);
+  });
+
+  test("a blog without url is not added", async () => {
+    const newBlog = initialBlogs[5];
+    const response = await api.post("/api/blogs").send(newBlog).expect(400);
+
+    assert(response.body.error);
+    assert.match(response.body.error, /url/);
+  });
+
+  after(async () => {
+    await mongoose.connection.close();
+  });
 });
