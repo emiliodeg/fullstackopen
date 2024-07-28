@@ -23,3 +23,7 @@ Content-Type: application/json
     "url": "https://grrmartin.com",
     "likes": 51
 }
+
+###
+
+DELETE http://localhost:3001/api/blogs/66a65c317b13e7648695f3a6
