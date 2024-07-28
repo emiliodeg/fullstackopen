@@ -68,6 +68,12 @@ test("there are 2 saved blogs", async () => {
   assert.strictEqual(result.body.length, 2);
 });
 
+test("there is a ID property", async () => {
+  const result = await api.get("/api/blogs");
+
+  result.body.forEach((blog) => assert(blog.id));
+});
+
 after(async () => {
   await mongoose.connection.close();
 });
