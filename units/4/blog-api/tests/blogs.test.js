@@ -30,7 +30,6 @@ const initialBlogs = [
     title: "First class tests",
     author: "Robert C. Martin",
     url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
-    likes: 10,
   },
   {
     title: "TDD harms architecture",
@@ -88,6 +87,18 @@ test("a valid blog can be added", async () => {
 
   assert.strictEqual(result.body.length, 3);
   assert.strictEqual(titles.includes(newBlog.title), true);
+});
+
+test("a blog without likes defaults to 0", async () => {
+  const newBlog = initialBlogs[3];
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(201);
+
+  const result = await api.get("/api/blogs");
+
+  assert.strictEqual(result.body[2].likes, 0);
 });
 
 after(async () => {
