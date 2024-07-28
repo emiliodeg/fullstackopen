@@ -15,7 +15,17 @@ blogsRouter.post("/", async (request, response, next) => {
 
     response.status(201).json(result);
   } catch (error) {
-    next(error)
+    next(error);
+  }
+});
+
+blogsRouter.put("/:id", async (request, response, next) => {
+  const { likes } = request.body;
+  try {
+    const result = await Blog.findByIdAndUpdate(request.params.id, { likes }, { new: true, runValidators: true, context: "query" });
+    response.json(result);
+  } catch (error) {
+    next(error);
   }
 });
 

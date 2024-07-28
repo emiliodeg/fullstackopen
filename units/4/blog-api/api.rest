@@ -27,3 +27,13 @@ Content-Type: application/json
 ###
 
 DELETE http://localhost:3001/api/blogs/66a65c317b13e7648695f3a6
+
+###
+
+PUT http://localhost:3001/api/blogs/66a521dbe378a9c24d28a930
+Content-Type: application/json
+
+{
+    "likes": 17,
+    "title": "harry potter"
+}

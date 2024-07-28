@@ -118,12 +118,23 @@ describe("blogs api", () => {
   test("a blog can be deleted", async () => {
     const result = await api.get("/api/blogs");
     assert.strictEqual(result.body.length, 2);
-    
+
     const id = result.body[1].id;
     await api.delete(`/api/blogs/${id}`).expect(204);
-    
+
     const resultAfterDelete = await api.get("/api/blogs").expect(200);
     assert.strictEqual(resultAfterDelete.body.length, 1);
+  });
+
+  test("a blog can be updated only likes", async () => {
+    const result = await api.get("/api/blogs");
+    const { id, title } = result.body[0];
+
+    await api.put(`/api/blogs/${id}`).send({ likes: 42, title: "another title" }).expect(200);
+
+    const resultAfterUpdate = await api.get("/api/blogs");
+    assert.strictEqual(resultAfterUpdate.body[0].likes, 42);
+    assert.strictEqual(resultAfterUpdate.body[0].title, title);
   });
 
   after(async () => {
