@@ -74,6 +74,22 @@ test("there is a ID property", async () => {
   result.body.forEach((blog) => assert(blog.id));
 });
 
+test("a valid blog can be added", async () => {
+  const newBlog = initialBlogs[2];
+
+  await api
+    .post("/api/blogs")
+    .send(newBlog)
+    .expect(201)
+    .expect("Content-Type", /application\/json/);
+
+  const result = await api.get("/api/blogs");
+  const titles = result.body.map(({ title }) => title);
+
+  assert.strictEqual(result.body.length, 3);
+  assert.strictEqual(titles.includes(newBlog.title), true);
+});
+
 after(async () => {
   await mongoose.connection.close();
 });
