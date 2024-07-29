@@ -10,14 +10,10 @@ blogsRouter.get("/", async (request, response) => {
 });
 
 blogsRouter.post("/", async (request, response, next) => {
-  const token = request.header("Authorization");
+  const { token } = request;
 
   if (!token) {
     return response.status(401).json({ error: "token missing" });
-  }
-
-  if (token.startsWith("Bearer ")) {
-    token = token.slice(7);
   }
 
   const decodedToken = jwt.verify(token, process.env.SECRET);
