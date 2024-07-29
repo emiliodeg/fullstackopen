@@ -24,6 +24,18 @@ Content-Type: application/json
     "likes": 51
 }
 
+### 
+
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+    "title": "misery",
+    "author": "King",
+    "url": "https://king.com",
+    "likes": 12
+}
+
 ###
 
 DELETE http://localhost:3001/api/blogs/66a65c317b13e7648695f3a6
