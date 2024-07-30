@@ -33,6 +33,12 @@ const App = () => {
     }
   };
 
+  const handleLogout = () => {
+    setUser(null);
+    blogService.setToken(null);
+    window.localStorage.removeItem("loggedUser");
+  };
+
   useEffect(() => {
     const session = window.localStorage.getItem("loggedUser");
     if (!session) return;
@@ -55,7 +61,7 @@ const App = () => {
       {user === null ? (
         <Login handleLogin={handleLogin} username={username} setUsername={setUsername} password={password} setPassword={setPassword} />
       ) : (
-        <LoggedIn user={user} />
+        <LoggedIn user={user} handleLogout={handleLogout} />
       )}
 
       {user !== null && blogs.map((blog) => <Blog key={blog.id} blog={blog} />)}

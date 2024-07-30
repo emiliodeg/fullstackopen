@@ -12,4 +12,6 @@ MERN+GraphQL course https://fullstackopen.com/
 
 - [part/3](https://github.com/emiliodeg/fullstackopen-api): [Programming a server with NodeJS and Express](https://fullstackopen.com/en/part3) 
 
-- [part/4](./units/2): [Testing Express servers, user administration](https://fullstackopen.com/en/part4) 
+- [part/4](./units/4): [Testing Express servers, user administration](https://fullstackopen.com/en/part4) 
+
+- [part/5](./units/5): [Testing React apps](https://fullstackopen.com/en/part5) 

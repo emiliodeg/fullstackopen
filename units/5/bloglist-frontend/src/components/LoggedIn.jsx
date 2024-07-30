@@ -1,7 +1,9 @@
-function LoggedIn({ user }) {
+function LoggedIn({ user, handleLogout }) {
   return (
     <>
-      <p> logged in</p>
+      <p>
+        {user.name} logged in <button onClick={handleLogout}>logout</button>
+      </p>
     </>
   );
 }
