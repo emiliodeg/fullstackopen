@@ -3,6 +3,7 @@ import Blog from "./components/Blog";
 import Login from "./components/Login";
 import LoggedIn from "./components/LoggedIn";
 import Notification from "./components/Notification";
+import CreateBlog from "./components/CreateBlog";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 
@@ -12,6 +13,9 @@ const App = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
+  const [url, setUrl] = useState("");
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -39,6 +43,22 @@ const App = () => {
     window.localStorage.removeItem("loggedUser");
   };
 
+  const handleCreateBlog = async (event) => {
+    event.preventDefault();
+    const blog = {
+      title,
+      author,
+      url,
+    };
+    
+    const newBlog = await blogService.create(blog);
+    setBlogs(blogs.concat(newBlog));
+
+    setTitle("");
+    setAuthor("");
+    setUrl("");
+  };
+
   useEffect(() => {
     const session = window.localStorage.getItem("loggedUser");
     if (!session) return;
@@ -64,6 +84,17 @@ const App = () => {
         <LoggedIn user={user} handleLogout={handleLogout} />
       )}
 
+      {user !== null && (
+        <CreateBlog
+          handleSubmit={handleCreateBlog}
+          title={title}
+          setTitle={setTitle}
+          author={author}
+          setAuthor={setAuthor}
+          url={url}
+          setUrl={setUrl}
+        />
+      )}
       {user !== null && blogs.map((blog) => <Blog key={blog.id} blog={blog} />)}
     </div>
   );
