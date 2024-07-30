@@ -1,9 +1,9 @@
-export default function ErrorMessage({ message }) {
-  if (!message) return null;
+export default function ErrorMessage({ notification }) {
+  if (!notification) return null;
 
   return (
     <>
-      <div className={`notification error`}>{message}</div>
+      <div className={`notification ${notification.type}`}>{notification.message}</div>
     </>
   );
 }

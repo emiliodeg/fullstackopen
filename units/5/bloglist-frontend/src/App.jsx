@@ -12,7 +12,7 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [notification, setNotification] = useState(null);
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
@@ -32,8 +32,8 @@ const App = () => {
       window.localStorage.setItem("loggedUser", JSON.stringify(user));
       blogService.setToken(user.token);
     } catch (exception) {
-      setErrorMessage("Wrong credentials");
-      setTimeout(() => setErrorMessage(null), 5000);
+      setNotification({ type: "error", message: "Wrong credentials" });
+      setTimeout(() => setNotification(null), 5000);
     }
   };
 
@@ -50,13 +50,19 @@ const App = () => {
       author,
       url,
     };
-    
-    const newBlog = await blogService.create(blog);
-    setBlogs(blogs.concat(newBlog));
 
-    setTitle("");
-    setAuthor("");
-    setUrl("");
+    try {
+      const newBlog = await blogService.create(blog);
+      setBlogs(blogs.concat(newBlog));
+      setNotification({ type: "success", message: `New blog added: ${newBlog.title}` });
+    } catch (exception) {
+      setNotification({ type: "error", message: "Could NOT create a new blog" });
+    } finally {
+      setTitle("");
+      setAuthor("");
+      setUrl("");
+      setTimeout(() => setNotification(null), 5000);
+    }
   };
 
   useEffect(() => {
@@ -76,7 +82,7 @@ const App = () => {
     <div>
       <h2>blogs</h2>
 
-      <Notification message={errorMessage} />
+      <Notification notification={notification} />
 
       {user === null ? (
         <Login handleLogin={handleLogin} username={username} setUsername={setUsername} password={password} setPassword={setPassword} />
