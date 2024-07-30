@@ -1,13 +1,16 @@
-const { test, describe, after, beforeEach } = require("node:test");
+const { test, describe, after, beforeEach, before } = require("node:test");
 const supertest = require("supertest");
 const app = require("../app");
 const mongoose = require("mongoose");
 const assert = require("node:assert");
 const Blog = require("../models/blog");
+const User = require("../models/user");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 const api = supertest(app);
 
-const initialBlogs = [
+let initialBlogs = [
   {
     title: "React patterns",
     author: "Michael Chan",
@@ -45,8 +48,23 @@ const initialBlogs = [
     likes: 2,
   },
 ];
+let token = "";
+let user = null;
 
 describe("blogs api", () => {
+  before(async () => {
+    await User.deleteMany({});
+    const passwordHash = await bcrypt.hash("testBlogs", 10);
+    user = new User({ username: "testBlogs", passwordHash, blogs: [] });
+    await user.save({ new: true });
+    token = jwt.sign({ username: user.username, id: user._id }, process.env.SECRET);
+
+    initialBlogs = initialBlogs.map((blog) => ({
+      ...blog,
+      user,
+    }));
+  });
+
   beforeEach(async () => {
     await Blog.deleteMany({});
     let blogEntry = new Blog(initialBlogs[0]);
@@ -79,6 +97,7 @@ describe("blogs api", () => {
 
     await api
       .post("/api/blogs")
+      .set("Authorization", token)
       .send(newBlog)
       .expect(201)
       .expect("Content-Type", /application\/json/);
@@ -92,7 +111,7 @@ describe("blogs api", () => {
 
   test("a blog without likes defaults to 0", async () => {
     const newBlog = initialBlogs[3];
-    await api.post("/api/blogs").send(newBlog).expect(201);
+    await api.post("/api/blogs").set("Authorization", token).send(newBlog).expect(201);
 
     const result = await api.get("/api/blogs");
 
@@ -101,7 +120,7 @@ describe("blogs api", () => {
 
   test("a blog without title is not added", async () => {
     const newBlog = initialBlogs[4];
-    const response = await api.post("/api/blogs").send(newBlog).expect(400);
+    const response = await api.post("/api/blogs").set("Authorization", token).send(newBlog).expect(400);
 
     assert(response.body.error);
     assert.match(response.body.error, /title/);
@@ -109,7 +128,7 @@ describe("blogs api", () => {
 
   test("a blog without url is not added", async () => {
     const newBlog = initialBlogs[5];
-    const response = await api.post("/api/blogs").send(newBlog).expect(400);
+    const response = await api.post("/api/blogs").set("Authorization", token).send(newBlog).expect(400);
 
     assert(response.body.error);
     assert.match(response.body.error, /url/);
@@ -120,7 +139,7 @@ describe("blogs api", () => {
     assert.strictEqual(result.body.length, 2);
 
     const id = result.body[1].id;
-    await api.delete(`/api/blogs/${id}`).expect(204);
+    await api.delete(`/api/blogs/${id}`).set("Authorization", token).expect(204);
 
     const resultAfterDelete = await api.get("/api/blogs").expect(200);
     assert.strictEqual(resultAfterDelete.body.length, 1);

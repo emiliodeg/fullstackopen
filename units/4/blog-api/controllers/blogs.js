@@ -1,6 +1,5 @@
 const blogsRouter = require("express").Router();
 const Blog = require("../models/blog");
-const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const middleware = require("../utils/middleware");
 
@@ -27,7 +26,7 @@ blogsRouter.post("/", middleware.userExtractor, async (request, response, next) 
   const blog = new Blog({ ...request.body, user });
 
   try {
-    const result = await blog.save({ new: true, runValidators: true });
+    const result = await blog.save({ validateBeforeSave: true });
 
     user.blogs = user.blogs.concat(result._id);
 

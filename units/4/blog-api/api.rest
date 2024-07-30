@@ -3,11 +3,11 @@ GET http://localhost:3001/api/blogs
 ### 
 
 POST http://localhost:3001/api/blogs
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6IjY2YTY2YmNiN2EwYmNiZjViZTcxNTJiNyIsImlhdCI6MTcyMjI1NjI4MH0.ZdbWk7cyJl44ny0H94pgROVeeGx113wEnNUDxbuBSjk
 Content-Type: application/json
 
 {
-    "title": "test title",
-    "author": "John Doe",
+    "author": "no title",
     "url": "https://google.com",
     "likes": 7
 }

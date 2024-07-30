@@ -14,7 +14,7 @@ const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: "unknown endpoint" });
 };
 
-const errorHandler = (error, request, response) => {
+const errorHandler = (error, request, response, next) => {
   logger.error(error.message);
 
   if (error.name === "CastError") {
@@ -24,6 +24,8 @@ const errorHandler = (error, request, response) => {
   } else if (error.message.includes("E11000 duplicate key error collection")) {
     return response.status(400).json({ error: "username already exists" });
   }
+
+  next()
 };
 
 const tokenExtractor = (request, response, next) => {
