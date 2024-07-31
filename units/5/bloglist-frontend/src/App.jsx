@@ -78,8 +78,13 @@ const App = () => {
     blogService.setToken(user.token);
   }, []);
 
-  useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
+  useEffect(async () => {
+    const blogs = await blogService.getAll()
+    
+    // sort by likes DESC, first one is the most liked
+    blogs.sort((a, b) => b.likes - a.likes);
+
+    setBlogs(blogs);
   }, []);
 
   return (
