@@ -1,4 +1,20 @@
-export default function CreateBlog({ handleSubmit, title, setTitle, author, setAuthor, url, setUrl }) {
+import { useState } from "react";
+
+export default function CreateBlog({ addBlog }) {
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
+  const [url, setUrl] = useState("");
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    
+    addBlog({ title, author, url });
+
+    setTitle("");
+    setAuthor("");
+    setUrl("");
+  };
+
   return (
     <>
       <h2>Add new blog</h2>

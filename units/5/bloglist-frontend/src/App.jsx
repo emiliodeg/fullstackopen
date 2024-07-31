@@ -14,9 +14,6 @@ const App = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [notification, setNotification] = useState(null);
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [url, setUrl] = useState("");
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -46,14 +43,8 @@ const App = () => {
 
   const toggleRef = useRef();
 
-  const handleCreateBlog = async (event) => {
-    event.preventDefault();
-    toggleRef.current.toggleVisibility()
-    const blog = {
-      title,
-      author,
-      url,
-    };
+  const createBlog = async (blog) => {
+    toggleRef.current.toggleVisibility();
 
     try {
       const newBlog = await blogService.create(blog);
@@ -62,9 +53,6 @@ const App = () => {
     } catch (exception) {
       setNotification({ type: "error", message: "Could NOT create a new blog" });
     } finally {
-      setTitle("");
-      setAuthor("");
-      setUrl("");
       setTimeout(() => setNotification(null), 5000);
     }
   };
@@ -96,15 +84,7 @@ const App = () => {
 
       {user !== null && (
         <Toggle buttonLabel="create new blog" ref={toggleRef}>
-          <CreateBlog
-            handleSubmit={handleCreateBlog}
-            title={title}
-            setTitle={setTitle}
-            author={author}
-            setAuthor={setAuthor}
-            url={url}
-            setUrl={setUrl}
-          />
+          <CreateBlog addBlog={createBlog} />
         </Toggle>
       )}
       {user !== null && blogs.map((blog) => <Blog key={blog.id} blog={blog} />)}
