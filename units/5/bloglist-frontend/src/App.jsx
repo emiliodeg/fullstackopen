@@ -57,6 +57,18 @@ const App = () => {
     }
   };
 
+  const handleLike = async (blog) => {
+    try {
+      const updatedBlog = await blogService.update({ ...blog, likes: blog.likes + 1 });
+      setBlogs(blogs.map((b) => (b.id === blog.id ? updatedBlog : b)));
+      setNotification({ type: "success", message: "Like saved" });
+    } catch (exception) {
+      setNotification({ type: "error", message: "Could NOT update blog" });
+    } finally {
+      setTimeout(() => setNotification(null), 5000);
+    }
+  };
+
   useEffect(() => {
     const session = window.localStorage.getItem("loggedUser");
     if (!session) return;
@@ -87,7 +99,7 @@ const App = () => {
           <CreateBlog addBlog={createBlog} />
         </Toggle>
       )}
-      {user !== null && blogs.map((blog) => <Blog key={blog.id} blog={blog} />)}
+      {user !== null && blogs.map((blog) => <Blog key={blog.id} blog={blog} onLike={handleLike} />)}
     </div>
   );
 };
