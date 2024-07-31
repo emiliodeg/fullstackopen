@@ -69,6 +69,18 @@ const App = () => {
     }
   };
 
+  const handleBlogDelete = async (blog) => {
+    try {
+      await blogService.remove(blog);
+      setBlogs(blogs.filter((b) => b.id !== blog.id));
+      setNotification({ type: "success", message: "Blog deleted" });
+    } catch (exception) {
+      setNotification({ type: "error", message: "Could NOT delete blog" });
+    } finally {
+      setTimeout(() => setNotification(null), 5000);
+    }
+  };
+
   useEffect(() => {
     const session = window.localStorage.getItem("loggedUser");
     if (!session) return;
@@ -78,13 +90,17 @@ const App = () => {
     blogService.setToken(user.token);
   }, []);
 
-  useEffect(async () => {
-    const blogs = await blogService.getAll()
-    
-    // sort by likes DESC, first one is the most liked
-    blogs.sort((a, b) => b.likes - a.likes);
+  useEffect(() => {
+    async function getBlogs() {
+      const blogs = await blogService.getAll();
 
-    setBlogs(blogs);
+      // sort by likes DESC, first one is the most liked
+      blogs.sort((a, b) => b.likes - a.likes);
+
+      setBlogs(blogs);
+    };
+
+    getBlogs();
   }, []);
 
   return (
@@ -104,7 +120,7 @@ const App = () => {
           <CreateBlog addBlog={createBlog} />
         </Toggle>
       )}
-      {user !== null && blogs.map((blog) => <Blog key={blog.id} blog={blog} onLike={handleLike} />)}
+      {user !== null && blogs.map((blog) => <Blog key={blog.id} blog={blog} user={user} onLike={handleLike} onDelete={handleBlogDelete} />)}
     </div>
   );
 };

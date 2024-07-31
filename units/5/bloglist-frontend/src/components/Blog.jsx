@@ -1,9 +1,15 @@
 import { useState } from "react";
 
-const Blog = ({ blog, onLike }) => {
+const Blog = ({ blog, user, onLike, onDelete }) => {
   const [visible, setVisible] = useState(false);
 
+  console.log(user);
 
+  const confirmBeforeDelete = (blog) => {
+    if (!window.confirm(`Remove ${blog.title} by ${blog.author}?`)) return;
+
+    onDelete(blog);
+  };
 
   return (
     <div className="bordered">
@@ -17,6 +23,7 @@ const Blog = ({ blog, onLike }) => {
           likes {blog.likes} <button onClick={() => onLike(blog)}>like</button>
           <br />
           Author: {blog.author}
+          {user && user.username === blog?.user?.username && <button onClick={() => confirmBeforeDelete(blog)}>remove</button>}
         </div>
       )}
     </div>
