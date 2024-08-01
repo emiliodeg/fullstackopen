@@ -39,3 +39,25 @@ test('show url and number of likes', async () => {
   screen.getByText(blog.url)
   screen.getByText(blog.likes, { exact: false })
 })
+
+test('check if after clicking twice on like button, the handler is called twice', async () => {
+  const blog = {
+    title: 'Component testing is done with react-testing-library',
+    author: 'author',
+    url: 'https://url.test',
+    likes: 13,
+  }
+
+  const mockHandler = vi.fn()
+
+  render(<Blog blog={blog} onLike={mockHandler} />)
+
+  const user = userEvent.setup()
+  await user.click(screen.getByText('view'))
+  
+  const button = screen.getByText('like')
+  await user.click(button)
+  await user.click(button)
+
+  expect(mockHandler.mock.calls).toHaveLength(2)
+})
