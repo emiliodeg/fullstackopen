@@ -185,5 +185,69 @@ describe('Blog app', () => {
           .getByRole('button', { name: 'remove' }),
       ).not.toBeVisible()
     })
+
+    test('blogs sorted by likes', async ({ page }) => {
+      const blogs = [
+        {
+          title: 'empty liquid review exactly money',
+          author: 'John Logan',
+          url: 'http://another.url',
+        },
+        {
+          title: 'aloud sure there perfectly surface',
+          author: 'Dennis Daniels',
+          url: 'http://love.url',
+        },
+        {
+          title: 'gate pale almost pair instrument two dead',
+          author: 'Olga Holt',
+          url: 'http://dontlike.url',
+        },
+      ]
+
+      for (const blog of blogs) {
+        await page.getByRole('button', { name: 'new blog' }).click()
+
+        await page.getByTestId('title').fill(blog.title)
+        await page.getByTestId('author').fill(blog.author)
+        await page.getByTestId('url').fill(blog.url)
+
+        await page.getByRole('button', { name: 'create' }).click()
+        await page.waitForResponse(
+          (res) => res.url().includes('/api/blogs') && res.status() === 201,
+        )
+      }
+
+      await page
+        .locator('li')
+        .filter({ hasText: blogs[0].title })
+        .getByRole('button')
+        .click()
+
+      await page
+        .locator('li')
+        .filter({ hasText: blogs[1].title })
+        .getByRole('button')
+        .click()
+
+      await page
+        .locator('li')
+        .filter({ hasText: blogs[2].title })
+        .getByRole('button')
+        .click()
+
+      const second = page.getByRole('button', { name: 'like' }).nth(1)
+
+      await second.click()
+      await second.click()
+
+      const last = page.getByRole('button', { name: 'like' }).last()
+
+      await last.click()
+
+      expect(page.locator('li').first()).toContainText(blogs[1].title)
+      expect(page.locator('li').nth(1)).toContainText(blogs[2].title)
+      expect(page.locator('li').last()).toContainText(blogs[0].title)
+    })
   })
 })

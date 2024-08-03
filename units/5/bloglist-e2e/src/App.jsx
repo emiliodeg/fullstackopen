@@ -100,9 +100,6 @@ const App = () => {
     async function getBlogs() {
       const blogs = await blogService.getAll()
 
-      // sort by likes DESC, first one is the most liked
-      blogs.sort((a, b) => b.likes - a.likes)
-
       setBlogs(blogs)
     }
 
@@ -132,16 +129,18 @@ const App = () => {
           </Toggle>
 
           <ul data-testid="blogs">
-            {blogs.map((blog) => (
-              <li key={blog.id}>
-                <Blog
-                  blog={blog}
-                  user={user}
-                  onLike={handleLike}
-                  onDelete={handleBlogDelete}
-                />
-              </li>
-            ))}
+            {blogs
+              .sort((a, b) => b.likes - a.likes)
+              .map((blog) => (
+                <li key={blog.id}>
+                  <Blog
+                    blog={blog}
+                    user={user}
+                    onLike={handleLike}
+                    onDelete={handleBlogDelete}
+                  />
+                </li>
+              ))}
           </ul>
         </>
       )}
