@@ -17,6 +17,7 @@ function Login({ handleLogin, username, setUsername, password, setPassword }) {
           <input
             value={username}
             onChange={({ target }) => setUsername(target.value)}
+            data-testid="username"
           />
         </div>
         <div>
@@ -25,6 +26,7 @@ function Login({ handleLogin, username, setUsername, password, setPassword }) {
             type="password"
             value={password}
             onChange={({ target }) => setPassword(target.value)}
+            data-testid="password"
           />
         </div>
         <button type="submit">login</button>

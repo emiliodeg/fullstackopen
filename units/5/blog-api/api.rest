@@ -1,0 +1,127 @@
+GET http://localhost:3001/api/blogs
+
+### 
+
+POST http://localhost:3001/api/blogs
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6IjY2YTY2YmNiN2EwYmNiZjViZTcxNTJiNyIsImlhdCI6MTcyMjI1NjI4MH0.ZdbWk7cyJl44ny0H94pgROVeeGx113wEnNUDxbuBSjk
+Content-Type: application/json
+
+{
+    "author": "no title",
+    "url": "https://google.com",
+    "likes": 7
+}
+
+### 
+
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+    "title": "game of thrones",
+    "author": "George RR Martin",
+    "url": "https://grrmartin.com",
+    "likes": 51
+}
+
+### 
+
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+    "title": "misery",
+    "author": "King",
+    "url": "https://king.com",
+    "likes": 12
+}
+
+### 
+
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6IjY2YTY2YmNiN2EwYmNiZjViZTcxNTJiNyIsImlhdCI6MTcyMjI1NjI4MH0.ZdbWk7cyJl44ny0H94pgROVeeGx113wEnNUDxbuBSjk
+
+{
+    "title": "pet cementry",
+    "author": "King",
+    "url": "https://king.com",
+    "likes": 12
+}
+
+###
+
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6IjY2YTY2YmNiN2EwYmNiZjViZTcxNTJiNyIsImlhdCI6MTcyMjI1NjI4MH0.ZdbWk7cyJl44ny0H94pgROVeeGx113wEnNUDxbuBSjk
+
+{
+    "title": "Carry",
+    "author": "King",
+    "url": "https://king.com",
+    "likes": 5
+}
+
+###
+
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6IjY2YTY2YmNiN2EwYmNiZjViZTcxNTJiNyIsImlhdCI6MTcyMjI1NjI4MH0.ZdbWk7cyJl44ny0H94pgROVeeGx113wEnNUDxbuBSjk
+
+{
+    "title": "Salem spot",
+    "author": "King",
+    "url": "https://king.com",
+    "likes": 55
+}
+
+###
+
+DELETE http://localhost:3001/api/blogs/66a79e9cfd75cdf76fcf24ef
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6IjY2YTY2YmNiN2EwYmNiZjViZTcxNTJiNyIsImlhdCI6MTcyMjI1NjI4MH0.ZdbWk7cyJl44ny0H94pgROVeeGx113wEnNUDxbuBSjk
+
+###
+
+PUT http://localhost:3001/api/blogs/66a521dbe378a9c24d28a930
+Content-Type: application/json
+
+{
+    "likes": 17,
+    "title": "harry potter"
+}
+
+### 
+
+GET http://localhost:3001/api/users
+
+### 
+
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+    "username": "test",
+    "name": "test",
+    "password": "test"
+}
+
+### 
+
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+    "username": "test23",
+    "name": "test",
+    "password": "te"
+}
+
+###
+
+POST http://localhost:3001/api/login
+Content-Type: application/json
+
+{
+    "username": "test",
+    "password": "test"
+}

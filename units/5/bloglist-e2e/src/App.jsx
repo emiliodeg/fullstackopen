@@ -124,24 +124,27 @@ const App = () => {
           setPassword={setPassword}
         />
       ) : (
-        <LoggedIn user={user} handleLogout={handleLogout} />
-      )}
+        <>
+          <LoggedIn user={user} handleLogout={handleLogout} />
 
-      {user !== null && (
-        <Toggle buttonLabel="create new blog" ref={toggleRef}>
-          <CreateBlog addBlog={createBlog} />
-        </Toggle>
+          <Toggle buttonLabel="create new blog" ref={toggleRef}>
+            <CreateBlog addBlog={createBlog} />
+          </Toggle>
+
+          <ul data-testid="blogs">
+            {blogs.map((blog) => (
+              <li key={blog.id}>
+                <Blog
+                  blog={blog}
+                  user={user}
+                  onLike={handleLike}
+                  onDelete={handleBlogDelete}
+                />
+              </li>
+            ))}
+          </ul>
+        </>
       )}
-      {user !== null &&
-        blogs.map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            user={user}
-            onLike={handleLike}
-            onDelete={handleBlogDelete}
-          />
-        ))}
     </div>
   )
 }

@@ -31,6 +31,7 @@ export default function CreateBlog({ addBlog }) {
               name="title"
               value={title}
               onChange={({ target }) => setTitle(target.value)}
+              data-testid="title"
             />
           </label>
         </div>
@@ -41,6 +42,7 @@ export default function CreateBlog({ addBlog }) {
               name="author"
               value={author}
               onChange={({ target }) => setAuthor(target.value)}
+              data-testid="author"
             />
           </label>
         </div>
@@ -52,6 +54,7 @@ export default function CreateBlog({ addBlog }) {
               name="url"
               value={url}
               onChange={({ target }) => setUrl(target.value)}
+              data-testid="url"
             />
           </label>
         </div>
