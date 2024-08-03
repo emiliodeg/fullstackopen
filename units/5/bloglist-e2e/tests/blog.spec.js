@@ -124,10 +124,66 @@ describe('Blog app', () => {
         .click(),
       page.on('dialog', (dialog) => dialog.accept())
 
-      await page.getByTestId('blogs').getByRole('button', { name: 'remove' }).click(),
-      
-      await expect(page.getByTestId('blogs').getByText(blog.title)).not.toBeVisible()
+      await page
+        .getByTestId('blogs')
+        .getByRole('button', { name: 'remove' })
+        .click(),
+      await expect(
+        page.getByTestId('blogs').getByText(blog.title),
+      ).not.toBeVisible()
       await expect(page.getByText('blog deleted')).toBeVisible()
+    })
+
+    test('not able to delete a blog that you did not create', async ({
+      page,
+      request,
+    }) => {
+      const blog = {
+        title: 'blog created by another user',
+        author: 'author',
+        url: 'http://another.url',
+      }
+
+      await page.getByRole('button', { name: 'new blog' }).click()
+
+      await page.getByTestId('title').fill(blog.title)
+      await page.getByTestId('author').fill(blog.author)
+      await page.getByTestId('url').fill(blog.url)
+
+      await page.getByRole('button', { name: 'create' }).click()
+
+      await expect(
+        page.getByText(`new blog added: ${blog.title}`),
+      ).toBeVisible()
+
+      await page.getByRole('button', { name: 'logout' }).click()
+
+      const user = {
+        username: 'other',
+        name: 'other',
+        password: 'other',
+      }
+
+      await request.post('/api/users', { data: user })
+      loginWith(page, user.username, user.password)
+
+      await expect(
+        page.getByTestId('blogs').getByText(blog.title),
+      ).toBeVisible()
+
+      await page
+        .getByTestId('blogs')
+        .getByText(blog.title)
+        .locator('..')
+        .getByRole('button', { name: 'view' })
+        .click()
+
+      await expect(
+        page
+          .getByTestId('blogs')
+          .getByText(blog.title)
+          .getByRole('button', { name: 'remove' }),
+      ).not.toBeVisible()
     })
   })
 })
