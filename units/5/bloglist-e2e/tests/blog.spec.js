@@ -69,7 +69,7 @@ describe('Blog app', () => {
       await expect(page.getByText(blog.author, { exact: true })).toBeVisible()
     })
 
-    test('a newblog can be liked', async ({ page }) => {
+    test('a new blog can be liked', async ({ page }) => {
       const blog = {
         title: 'to be liked',
         author: 'author i love',
@@ -94,9 +94,40 @@ describe('Blog app', () => {
         .getByRole('button', { name: 'view' })
         .click(),
       page.getByTestId('blogs').getByRole('button', { name: 'like' }).click(),
+      await expect(page.getByText('like saved')).toBeVisible()
+    })
+
+    test('create and delete a blog', async ({ page }) => {
+      const blog = {
+        title: 'to be deleted',
+        author: 'author i do not like',
+        url: 'http://dontlike.url',
+      }
+
+      await page.getByRole('button', { name: 'new blog' }).click()
+
+      await page.getByTestId('title').fill(blog.title)
+      await page.getByTestId('author').fill(blog.author)
+      await page.getByTestId('url').fill(blog.url)
+
+      await page.getByRole('button', { name: 'create' }).click()
+
       await expect(
-        page.getByText('like saved'),
+        page.getByText(`new blog added: ${blog.title}`),
       ).toBeVisible()
+
+      await page
+        .getByTestId('blogs')
+        .getByText(blog.title, { exact: true })
+        .locator('..')
+        .getByRole('button', { name: 'view' })
+        .click(),
+      page.on('dialog', (dialog) => dialog.accept())
+
+      await page.getByTestId('blogs').getByRole('button', { name: 'remove' }).click(),
+      
+      await expect(page.getByTestId('blogs').getByText(blog.title)).not.toBeVisible()
+      await expect(page.getByText('blog deleted')).toBeVisible()
     })
   })
 })
