@@ -68,5 +68,35 @@ describe('Blog app', () => {
       ).toBeVisible()
       await expect(page.getByText(blog.author, { exact: true })).toBeVisible()
     })
+
+    test('a newblog can be liked', async ({ page }) => {
+      const blog = {
+        title: 'to be liked',
+        author: 'author i love',
+        url: 'http://love.url',
+      }
+
+      await page.getByRole('button', { name: 'new blog' }).click()
+
+      await page.getByTestId('title').fill(blog.title)
+      await page.getByTestId('author').fill(blog.author)
+      await page.getByTestId('url').fill(blog.url)
+
+      await page.getByRole('button', { name: 'create' }).click()
+
+      await expect(
+        page.getByText(`new blog added: ${blog.title}`),
+      ).toBeVisible()
+      page
+        .getByTestId('blogs')
+        .getByText(blog.title, { exact: true })
+        .locator('..')
+        .getByRole('button', { name: 'view' })
+        .click(),
+      page.getByTestId('blogs').getByRole('button', { name: 'like' }).click(),
+      await expect(
+        page.getByText('like saved'),
+      ).toBeVisible()
+    })
   })
 })
