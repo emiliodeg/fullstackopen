@@ -1,18 +1,18 @@
 import { useSelector, useDispatch } from "react-redux";
 import { vote } from "../reducers/anecdoteReducer";
+import { setNotification } from "../reducers/notificationReducer";
 
 export default function AnecdoteList() {
   const anecdotes = useSelector(({ anecdotes, filter }) => {
     if (!filter) return anecdotes;
 
-    return anecdotes.filter((anecdote) =>
-      anecdote.content.toLowerCase().includes(filter.toLowerCase())
-    );
+    return anecdotes.filter((anecdote) => anecdote.content.toLowerCase().includes(filter.toLowerCase()));
   });
   const dispatch = useDispatch();
 
   const handleVote = (id) => {
     dispatch(vote(id));
+    dispatch(setNotification(`you voted for ${anecdotes.find((a) => a.id === id).content}`));    
   };
 
   return (
