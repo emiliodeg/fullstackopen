@@ -17,6 +17,8 @@ const asObject = (anecdote) => {
   };
 };
 
+// action creators
+
 export const createAnecdote = (anecdote) => {
   return {
     type: "NEW_ANECDOTE",
@@ -30,6 +32,8 @@ export const voteAnecdote = (id) => {
     payload: { id },
   };
 };
+
+// state
 
 const initialState = anecdotesAtStart.map(asObject);
 
