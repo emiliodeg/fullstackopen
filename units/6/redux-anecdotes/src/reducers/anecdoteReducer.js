@@ -17,6 +17,13 @@ const asObject = (anecdote) => {
   };
 };
 
+export const createAnecdote = (anecdote) => {
+  return {
+    type: "NEW_ANECDOTE",
+    payload: asObject(anecdote),
+  };
+};
+
 export const voteAnecdote = (id) => {
   return {
     type: "VOTE",
@@ -38,6 +45,10 @@ const reducer = (state = initialState, action) => {
         votes: anecdote.votes + 1,
       };
     });
+  }
+
+  if (action.type === "NEW_ANECDOTE") {
+    return [...state, action.payload];
   }
 
   return state;
