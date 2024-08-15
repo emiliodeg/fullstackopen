@@ -1,6 +1,6 @@
 import AnecdoteForm from "./components/AnecdoteForm";
 import Notification from "./components/Notification";
-
+import { useNotificationDispatch } from "./contexts/NotificationContext";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getAnecdotes, updateAnecdote } from "./requests/anecdotes";
 
@@ -16,6 +16,8 @@ const App = () => {
     refetchOnWindowFocus: false,
   });
 
+  const dispatchNotification = useNotificationDispatch();
+
   const queryClient = useQueryClient();
   const updateAnecdoteMutation = useMutation({
     mutationFn: updateAnecdote,
@@ -27,7 +29,7 @@ const App = () => {
       );
     },
   });
-  
+
   if (isError) {
     return <div>anecdote service not available due to problems in server</div>;
   }
@@ -38,6 +40,7 @@ const App = () => {
 
   const handleVote = (anecdote) => {
     updateAnecdoteMutation.mutate({ ...anecdote, votes: anecdote.votes + 1 });
+    dispatchNotification(`you voted for ${anecdote.content}`);
   };
 
   return (
