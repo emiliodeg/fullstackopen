@@ -10,9 +10,9 @@ export default function AnecdoteList() {
   });
   const dispatch = useDispatch();
 
-  const handleVote = (id) => {
-    dispatch(vote(id));
-    dispatch(setNotification(`you voted for ${anecdotes.find((a) => a.id === id).content}`));    
+  const handleVote = (anecdote) => {
+    dispatch(vote(anecdote));
+    dispatch(setNotification(`you voted for ${anecdote.content}`));    
   };
 
   return (
@@ -24,7 +24,7 @@ export default function AnecdoteList() {
             <div>{anecdote.content}</div>
             <div>
               has {anecdote.votes}
-              <button onClick={() => handleVote(anecdote.id)}>vote</button>
+              <button onClick={() => handleVote(anecdote)}>vote</button>
             </div>
           </div>
         ))}
