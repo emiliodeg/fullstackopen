@@ -12,7 +12,7 @@ export default function AnecdoteList() {
 
   const handleVote = (anecdote) => {
     dispatch(vote(anecdote));
-    dispatch(setNotification(`you voted for ${anecdote.content}`));    
+    dispatch(setNotification(`you voted for ${anecdote.content}`, 10));    
   };
 
   return (

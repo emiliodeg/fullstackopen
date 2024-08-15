@@ -11,7 +11,7 @@ export default function AnecdoteForm() {
     event.target.anecdote.value = "";
 
     dispatch(createAnecdote(content));
-    dispatch(setNotification(`you created '${content}'`));
+    dispatch(setNotification(`you created '${content}'`, 10));
   };
 
   return (

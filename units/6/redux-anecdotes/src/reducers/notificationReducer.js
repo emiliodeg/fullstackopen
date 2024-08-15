@@ -10,5 +10,13 @@ const reducer = createSlice({
   },
 }) 
 
-export const { setNotification } = reducer.actions;
+export const setNotification =  (message, time = 5) => {
+  return (dispatch) => {
+    dispatch(reducer.actions.setNotification(message));
+    setTimeout(() => {
+      dispatch(reducer.actions.setNotification(null));
+    }, time * 1000);
+  };
+}
+
 export default reducer.reducer;
