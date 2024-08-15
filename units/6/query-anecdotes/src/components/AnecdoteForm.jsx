@@ -9,9 +9,12 @@ const AnecdoteForm = () => {
   const newAnecdoteMutation = useMutation({
     mutationFn: createAnecdote,
     onSuccess: () => {
-      queryClient.invalidateQueries('anecdotes')
+      queryClient.invalidateQueries("anecdotes");
 
-      dispatchNotification("anecdote created")
+      dispatchNotification("anecdote created");
+    },
+    onError: (error) => {
+      dispatchNotification("anecdote creation failed. Reason: " + error.response.data.error);
     },
   });
 
