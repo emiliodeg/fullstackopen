@@ -15,3 +15,5 @@ MERN+GraphQL course https://fullstackopen.com/
 - [part/4](./units/4): [Testing Express servers, user administration](https://fullstackopen.com/en/part4) 
 
 - [part/5](./units/5): [Testing React apps](https://fullstackopen.com/en/part5) 
+
+- [part/6](./units/6): [Advanced state management](https://fullstackopen.com/en/part6) 
